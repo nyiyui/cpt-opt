@@ -45,6 +45,12 @@ func syncShare() error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		err2 := f.Close()
+		if err2 != nil {
+			err = err2
+		}
+	}()
 	_, _, err = unix.Syscall(unix.SYS_SYNCFS, f.Fd(), 0, 0)
 	if err != nil {
 		return err
